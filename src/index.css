@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-domi-dark text-white antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.ghost-pattern {
+  background-image: radial-gradient(#22c55e 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.btn-active {
+  @apply active:scale-95 transition-transform duration-200;
+}
