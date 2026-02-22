@@ -9,6 +9,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     
+    env:
+      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      ANDROID_HOME: /usr/local/lib/android/sdk
+    
     steps:
     - uses: actions/checkout@v4
 
@@ -32,9 +36,10 @@ jobs:
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
 
-    - name: Install Android SDK 35
+    - name: Install Android SDK 35 and accept licenses
       run: |
-        sdkmanager "platforms;android-35" "build-tools;35.0.0"
+        yes | sdkmanager --licenses || true
+        sdkmanager "platforms;android-35" "build-tools;35.0.0" "platform-tools"
 
     - name: Install Capacitor
       run: |
@@ -46,10 +51,13 @@ jobs:
     - name: Add Android platform
       run: npx cap add android
 
-    - name: Update Gradle to 8.5
+    - name: Update Gradle to 8.5 and SDK
       run: |
         cd android
         sed -i 's/gradle-8.2.1-all.zip/gradle-8.5-all.zip/' gradle/wrapper/gradle-wrapper.properties
+        # Asegurar que compileSdk sea 35
+        sed -i 's/compileSdkVersion.*/compileSdkVersion 35/' app/build.gradle || true
+        sed -i 's/targetSdkVersion.*/targetSdkVersion 35/' app/build.gradle || true
 
     - name: Sync Capacitor
       run: npx cap sync
