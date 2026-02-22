@@ -11,60 +11,55 @@ jobs:
     
     steps:
     - uses: actions/checkout@v4
-    
+
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        
+
     - name: Install dependencies
       run: npm install
-      
+
     - name: Build web app
       run: npm run build
-      
+
     - name: Setup Java
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: '21'
-        
+
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
-      
-    - name: Cache Gradle
-      uses: actions/cache@v4
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
-      
+
     - name: Install Capacitor
       run: |
         npm install @capacitor/core @capacitor/cli @capacitor/android
-        
+
     - name: Init Capacitor
       run: npx cap init domicoro com.domicoro.app --web-dir dist
-      
+
     - name: Add Android platform
       run: npx cap add android
-      
+
+    - name: Update Gradle to 8.5
+      run: |
+        cd android
+        sed -i 's/gradle-8.2.1-all.zip/gradle-8.5-all.zip/' gradle/wrapper/gradle-wrapper.properties
+
     - name: Sync Capacitor
       run: npx cap sync
-      
+
     - name: Fix Gradle permissions
       run: |
         cd android
         chmod +x gradlew
-      
+
     - name: Build APK
       run: |
         cd android
-        ./gradlew assembleDebug --no-daemon --stacktrace
-        
+        ./gradlew assembleDebug --no-daemon
+
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
