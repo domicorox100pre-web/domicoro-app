@@ -19,7 +19,7 @@ jobs:
       - name: Build Frontend
         run: |
           cd frontend
-          npm ci
+          npm install        # ← CAMBIADO: npm install en vez de npm ci
           npm run build
       
       - name: Deploy to DO Server
@@ -31,5 +31,5 @@ jobs:
           script: |
             cd /var/www/domicoro
             git pull origin main
-            cd backend && npm ci --production
-            sudo systemctl restart domicoro
+            cd backend && npm install --production   # ← CAMBIADO AQUÍ TAMBIÉN
+            sudo systemctl restart domicoro || sudo docker-compose restart
