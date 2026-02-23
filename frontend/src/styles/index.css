@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { @apply box-border; }
+  html { @apply antialiased; -webkit-tap-highlight-color: transparent; }
+  body { @apply bg-domi-dark text-white overflow-x-hidden; font-family: 'Inter', system-ui, sans-serif; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb { @apply bg-white/20 rounded-full; }
+}
+
+@layer components {
+  .btn-active { @apply active:scale-95 transition-transform duration-150; }
+  .glass { @apply bg-white/10 backdrop-blur-lg border border-white/10; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+}
+
+@layer utilities {
+  .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
+}
